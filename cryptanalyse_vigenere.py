@@ -75,19 +75,12 @@ def longueur_clef(cipher):
 # donné la longueur de la clé
 # en utilisant la lettre la plus fréquente
 # de chaque colonne
-def tableau_decalages_naif(cipher, key_length):
+def clef_par_decalages(cipher, key_length):
     """
     Documentation à écrire
     """
     decalages=[0]*key_length
     return decalages
-
-# Déchiffre avec le tableau de decalages
-def dechiffre_decalages(cipher, decalages):
-    """
-    Documentation à écrire
-    """
-    return cipher
 
 # Cryptanalyse V1 avec décalages par frequence max
 def cryptanalyse_v1(cipher):

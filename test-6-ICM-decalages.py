@@ -11,8 +11,8 @@ print("---------------------")
 
 print("Test indice_coincidence_mutuelle")
 assert indice_coincidence_mutuelle(freq("ABABAB"),freq("CDCDCD"),0) == 0
-assert abs(indice_coincidence_mutuelle(freq("ABABAB"),freq("CDCDCD"),2)-0.0266) < 0.0001
-assert abs(indice_coincidence_mutuelle(freq(text1),freq(text2),0)-12.3269) < 0.0001
+assert indice_coincidence_mutuelle(freq("ABABAB"),freq("CDCDCD"),2) == 0.5
+assert abs(indice_coincidence_mutuelle(freq(text1),freq(text2),0)-0.0369) < 0.001
 print("Test tableau_decalages_naif : OK")
 
 print("---------------------")
