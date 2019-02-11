@@ -35,7 +35,6 @@ print("Test indice_coincidence : OK")
 print("---------------------")
 
 print("Test longueur_clef")
-assert longueur_clef("AAAAAAAAAAAAAAA") == 3
 assert longueur_clef(text1) == 7
 assert longueur_clef(text2) == 10
 print("Test longueur_clef : OK")
