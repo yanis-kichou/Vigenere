@@ -17,6 +17,15 @@ print("Test freq : OK")
 
 print("---------------------")
 
+print("Test lettre_freq_max")
+assert lettre_freq_max("AAA") == 0
+assert lettre_freq_max("ALKINDI") == 8
+assert lettre_freq_max(text1) == 4
+assert lettre_freq_max(text2) == 3
+print("Test lettre_freq_max : OK")
+
+print("---------------------")
+
 print("Test incide_coincidence")
 assert indice_coincidence(freq("AAA"))==1
 assert abs(indice_coincidence(freq(text1))-0.04487)<0.00001
@@ -30,14 +39,5 @@ assert longueur_clef("AAAAAAAAAAAAAAA") == 3
 assert longueur_clef(text1) == 7
 assert longueur_clef(text2) == 10
 print("Test longueur_clef : OK")
-
-print("---------------------")
-
-print("Test lettre_freq_max")
-assert lettre_freq_max("AAA") == 0
-assert lettre_freq_max("ALKINDI") == 8
-assert lettre_freq_max(text1) == 4
-assert lettre_freq_max(text2) == 3
-print("Test lettre_freq_max : OK")
 
 print("\n\n----------------------------------------------\n\n")

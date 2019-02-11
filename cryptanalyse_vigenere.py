@@ -49,6 +49,14 @@ def freq(txt):
     hist=[0.0]*len(alphabet)
     return hist
 
+# Renvoie l'indice dans l'alphabet
+# de la lettre la plus fréquente d'un texte
+def lettre_freq_max(txt):
+    """
+    Documentation à écrire
+    """
+    return 0
+
 # indice de coïncidence
 def indice_coincidence(hist):
     """
@@ -63,14 +71,6 @@ def longueur_clef(cipher):
     """
     return 0
     
-# Renvoie l'indice dans l'alphabet
-# de la lettre la plus fréquente d'un texte
-def lettre_freq_max(txt):
-    """
-    Documentation à écrire
-    """
-    return 0
-
 # Renvoie le tableau des décalages probables étant
 # donné la longueur de la clé
 # en utilisant la lettre la plus fréquente
