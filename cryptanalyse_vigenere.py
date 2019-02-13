@@ -18,6 +18,11 @@ def chiffre_cesar(txt, key):
     """
     Documentation à écrire
     """
+    m=ord('Z')-ord('A')+1
+    message_chiffrer="" 
+    for c in txt:
+        message_chiffrer+=chr(((alphabet.index(c)+key)%m)+ord('A'))
+    txt=message_chiffrer
     return txt
 
 # Déchiffrement César
@@ -25,13 +30,19 @@ def dechiffre_cesar(txt, key):
     """
     Documentation à écrire
     """
+    m=ord('Z')-ord('A')+1
+    message_claire=""
+    for c in txt:
+        message_claire+=chr(((alphabet.index(c)-key)%m)+ord('A'))
+    txt=message_claire
     return txt
 
 # Chiffrement Vigenere
 def chiffre_vigenere(txt, key):
-    """
-    Documentation à écrire
-    """
+    message_chiffrer=""
+    for i in range(0,len(txt)):
+        message_chiffrer+=chr((alphabet.index(txt[i])+key[i%len(key)])%len(alphabet)+ord('A'))
+    txt=message_chiffrer
     return txt
 
 # Déchiffrement Vigenere
@@ -39,36 +50,42 @@ def dechiffre_vigenere(txt, key):
     """
     Documentation à écrire
     """
+    message_chiffrer=""
+    t=len(key)
+    al=len(alphabet)
+    for i in range(0,len(txt)):
+        message_chiffrer+=chr((alphabet.index(txt[i])-key[i%len(key)])%len(alphabet)+ord('A'))
+    txt=message_chiffrer
     return txt
 
 # Analyse de fréquences
 def freq(txt):
-    """
-    Documentation à écrire
-    """
     hist=[0.0]*len(alphabet)
+    for lettre in txt:
+        hist[alphabet.index(lettre)]+=1 
     return hist
 
 # Renvoie l'indice dans l'alphabet
 # de la lettre la plus fréquente d'un texte
 def lettre_freq_max(txt):
-    """
-    Documentation à écrire
-    """
-    return 0
+    return freq(txt).index(max(freq(txt)))
 
 # indice de coïncidence
 def indice_coincidence(hist):
-    """
-    Documentation à écrire
-    """
-    return 0.0
-
+    n=sum(hist)
+    somme=0
+    for ni in hist:
+        somme+=(ni*(ni-1))/(n*(n-1))
+    return somme
 # Recherche la longueur de la clé
 def longueur_clef(cipher):
-    """
-    Documentation à écrire
-    """
+    for i in range(1,20):
+            somme=0.0
+            for l in range (1,i):
+                somme+=indice_coincidence(freq(cipher[(l-1):len(cipher):i]))
+            if(somme/i > 0.06):
+                return i
+            
     return 0
     
 # Renvoie le tableau des décalages probables étant
@@ -76,10 +93,10 @@ def longueur_clef(cipher):
 # en utilisant la lettre la plus fréquente
 # de chaque colonne
 def clef_par_decalages(cipher, key_length):
-    """
-    Documentation à écrire
-    """
     decalages=[0]*key_length
+    for i in range(0,key_length):
+        decalages[i]=(lettre_freq_max(cipher[i:len(cipher):key_length])-alphabet.index('E'))%len(alphabet)
+    print(decalages)
     return decalages
 
 # Cryptanalyse V1 avec décalages par frequence max
