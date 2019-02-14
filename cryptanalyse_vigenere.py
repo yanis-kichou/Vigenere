@@ -106,7 +106,7 @@ def cryptanalyse_v1(cipher):
     	dechiffrement du message cipher en utilisant toutes les fanctiosn deja predefinie qui on permie de recupere la taille de la clef et d'avoir un tableau de decalage decrivant la clef 
     """
     key=longueur_clef(cipher)
-    if(len(key))>0:
+    if(key>0):
         return dechiffre_vigenere(cipher,clef_par_decalages(cipher,key))
     return cipher
 
