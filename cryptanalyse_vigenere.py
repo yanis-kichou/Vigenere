@@ -18,10 +18,9 @@ def chiffre_cesar(txt, key):
     """
     Documentation à écrire
     """
-    m=ord('Z')-ord('A')+1
     message_chiffrer="" 
     for c in txt:
-        message_chiffrer+=chr(((alphabet.index(c)+key)%m)+ord('A'))
+        message_chiffrer+=chr(((alphabet.index(c)+key)%len(alphabet))+ord('A'))
     txt=message_chiffrer
     return txt
 
@@ -30,10 +29,9 @@ def dechiffre_cesar(txt, key):
     """
     Documentation à écrire
     """
-    m=ord('Z')-ord('A')+1
     message_claire=""
     for c in txt:
-        message_claire+=chr(((alphabet.index(c)-key)%m)+ord('A'))
+        message_claire+=chr(((alphabet.index(c)-key)%len(alphabet))+ord('A'))
     txt=message_claire
     return txt
 
@@ -93,19 +91,24 @@ def longueur_clef(cipher):
 # en utilisant la lettre la plus fréquente
 # de chaque colonne
 def clef_par_decalages(cipher, key_length):
+    #vecteur qui enregistre le nombre de decalage par lettre de la clef
     decalages=[0]*key_length
+
+    #pour chaque decalage de la clef
     for i in range(0,key_length):
-        decalages[i]=(lettre_freq_max(cipher[i:len(cipher):key_length])-alphabet.index('E'))%len(alphabet)
-    print(decalages)
+    	#recupere la frequence de la lettre la plus utiliser et lui soustraire ord('E') pour recupere le nombre de pas de decalage (chiffrement cesar)
+    	decalages[i]=(lettre_freq_max(cipher[i:len(cipher):key_length])-alphabet.index('E'))%len(alphabet)
     return decalages
 
 # Cryptanalyse V1 avec décalages par frequence max
 def cryptanalyse_v1(cipher):
     """
-    Documentation à écrire
+    	dechiffrement du message cipher en utilisant toutes les fanctiosn deja predefinie qui on permie de recupere la taille de la clef et d'avoir un tableau de decalage decrivant la clef 
     """
-    return "TODO"
-
+    key=longueur_clef(cipher)
+    if(len(key))>0:
+        return dechiffre_vigenere(cipher,clef_par_decalages(cipher,key))
+    return cipher
 
 ################################################################
 
