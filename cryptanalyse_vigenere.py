@@ -11,7 +11,7 @@ alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 # Fréquence moyenne des lettres en français
 # À modifier
-freq_FR = [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+freq_FR = [0.09213414037491088,0.010354463742221126, 0.030178915678726964, 0.03753683726285317,0.17174710607479665, 0.010939030914707838, 0.01061497737343803,0.010717912027723734, 0.07507240372750529, 0.003832727374391129,6.989390105819367e-05, 0.061368115927295096, 0.026498684088462805,0.07030818127173859, 0.049140495636714375, 0.023697844853330825,0.010160031617459242, 0.06609294363882899, 0.07816806814528274,0.07374314880919855, 0.06356151362232132, 0.01645048271269667,1.14371838095226e-05, 0.004071637436190045, 0.0023001447439151006,0.0012263202640210343] 
 
 # Chiffrement César
 def chiffre_cesar(txt, key):
@@ -121,7 +121,12 @@ def indice_coincidence_mutuelle(h1,h2,d):
     """
     Documentation à écrire
     """
-    return 0.0
+    n1=sum(h1)
+    n2=sum(h2)
+    somme=0.0
+    for i in range(0,len(alphabet)):
+        somme+=(h1[i]*h2[(i+d)%len(alphabet)])/(n1*n2)
+    return somme
 
 # Renvoie le tableau des décalages probables étant
 # donné la longueur de la clé
@@ -131,7 +136,14 @@ def tableau_decalages_ICM(cipher, key_length):
     """
     Documentation à écrire
     """
+    icm=[]
     decalages=[0]*key_length
+    h1=freq(cipher[0:len(cipher):key_length])
+    for i in range (len(decalages)):
+        for j in range(0,len(alphabet)):
+            icm.append(indice_coincidence_mutuelle(h1,freq(cipher[i:len(cipher):key_length]),j))
+        decalages[i]=icm.index(max(icm))
+        icm=[]
     return decalages
 
 # Cryptanalyse V2 avec décalages par ICM
@@ -139,8 +151,18 @@ def cryptanalyse_v2(cipher):
     """
     Documentation à écrire
     """
-    return "TODO"
+    key_length=longueur_clef(cipher)
+    if(key_length>0):
+        tab_decalages=tableau_decalages_ICM(cipher,key_length)
+        text=""
+        h1=cipher[0:len(cipher):key_length]
+        for i in range(1,key_length):
+            text+=dechiffre_cesar(cipher[i:len(cipher):key_length],tab_decalages[i])
+        decalages=(freq_FR.index(max(freq_FR))-lettre_freq_max(text))%len(alphabet)
 
+        return chiffre_cesar(text,decalages)
+    else:
+        return cipher
 
 ################################################################
 
