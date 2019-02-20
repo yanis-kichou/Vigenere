@@ -116,7 +116,7 @@ def cryptanalyse_v1(cipher):
 ### Les fonctions suivantes sont utiles uniquement
 ### pour la cryptanalyse V2.
 
-# Indice de coincidence mutuelle avec décalage
+# Indice de coincidence mutuelle avec décalages
 def indice_coincidence_mutuelle(h1,h2,d):
     """
     Documentation à écrire
