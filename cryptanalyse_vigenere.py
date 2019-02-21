@@ -151,19 +151,26 @@ def cryptanalyse_v2(cipher):
     """
     Documentation à écrire
     """
-    key_length=longueur_clef(cipher)
-    if(key_length>0):
-        tab_decalages=tableau_decalages_ICM(cipher,key_length)
-        text=""
-        h1=cipher[0:len(cipher):key_length]
-        for i in range(1,key_length):
-            text+=dechiffre_cesar(cipher[i:len(cipher):key_length],tab_decalages[i])
-        decalages=(freq_FR.index(max(freq_FR))-lettre_freq_max(text))%len(alphabet)
-
-        return chiffre_cesar(text,decalages)
+    key_length = longueur_clef(cipher)
+    if(key_length != 0):
+        # On récupére le tableau de décalages 
+        decalages = tableau_decalages_ICM(cipher, key_length)
+        j=0
+        text_chifrre_en_cesar = ""
+        # On parcourt le texte et on décale chaque lettre grâce au tableau décalages
+        for i in cipher:
+            text_chifrre_en_cesar+=dechiffre_cesar(i, decalages[j%len(decalages)])
+            j+=1
+        text_dechifrre_en_cesar = ""
+        # On récupére la fréquence maximum du texte
+        freq_max=lettre_freq_max(text_chifrre_en_cesar)
+        # On récupére le décalage
+        decalage=(freq_FR.index(max(freq_FR))-freq_max)%len(alphabet)
+        for i in text_chifrre_en_cesar:
+            text_dechifrre_en_cesar+=chiffre_cesar(i, decalage)
+        return text_dechifrre_en_cesar
     else:
         return cipher
-
 ################################################################
 
 
