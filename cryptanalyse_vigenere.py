@@ -103,13 +103,18 @@ def clef_par_decalages(cipher, key_length):
 # Cryptanalyse V1 avec décalages par frequence max
 def cryptanalyse_v1(cipher):
     """
-    	dechiffrement du message cipher en utilisant toutes les fanctiosn deja predefinie qui on permie de recupere la taille de la clef et d'avoir un tableau de decalage decrivant la clef 
+    	dechiffrement du message cipher en utilisant toutes les fanctions deja predefinie qui on permie de recupere la taille de la clef et d'avoir un tableau de decalage decrivant la clef 
+    
+
     """
     key=longueur_clef(cipher)
     if(key>0):
         return dechiffre_vigenere(cipher,clef_par_decalages(cipher,key))
     return cipher
-
+    """
+    1) 11 textes etaient bien cryptanalysé
+    2)     
+    """
 ################################################################
 
 
@@ -145,6 +150,10 @@ def tableau_decalages_ICM(cipher, key_length):
         decalages[i]=icm.index(max(icm))
         icm=[]
     return decalages
+    """
+    1) le nombre de textes qui ont ete bien cryptanalysé est de 42
+    2) 
+    """
 
 # Cryptanalyse V2 avec décalages par ICM
 def cryptanalyse_v2(cipher):
@@ -183,7 +192,22 @@ def correlation(L1,L2):
     """
     Documentation à écrire
     """
-    return 0.0
+    def esperance(X):
+        return sum(X)/len(X)
+
+    correlation =0.0
+    A=0
+    B=0
+    C=0
+    X=esperance(L1)
+    Y=esperance(L2)
+    for  i in range(len(L1)):
+        A+=(L1[i]-X)*(L2[i]-Y)
+        B+=(L1[i]-X)**2
+        C+=(L2[i]-Y)**2
+
+    correlation=A /(math.sqrt(B*C))
+    return correlation
 
 # Renvoie la meilleur clé possible par correlation
 # étant donné une longueur de clé fixée
@@ -191,8 +215,16 @@ def clef_correlations(cipher, key_length):
     """
     Documentation à écrire
     """
+    
     key=[0]*key_length
     score = 0.0
+    
+    for i in range(key_length):
+        maxCorel=[0]*len(alphabet)
+        for j in range(len(alphabet)):
+            maxCorel[j]=correlation(freq(dechiffre_cesar(cipher[i:len(cipher):key_length],j)),freq_FR)
+        key[i]=maxCorel.index(max(maxCorel))
+        score+=(max(maxCorel)/key_length)
     return (score, key)
 
 # Cryptanalyse V3 avec correlations
@@ -200,8 +232,20 @@ def cryptanalyse_v3(cipher):
     """
     Documentation à écrire
     """
-    return "TODO"
+    resultat=list()
+    for i in range(20):
+        resultat.append(clef_correlations(cipher, i))
+    score=[a for (a,b) in resultat]
 
+    i=score.index(max(score))
+    (s,key)=resultat[i] 
+    
+    return dechiffre_vigenere(cipher, key)
+"""
+    1)94 textes etaient bien cryptanalysé
+    2)les caracteristiques des textes qui echouent est que la longueur de la clef utilisé pour le cryptage est grande
+
+"""
 
 ################################################################
 # NE PAS MODIFIER LES FONCTIONS SUIVANTES
