@@ -16,7 +16,9 @@ freq_FR = [0.09213414037491088,0.010354463742221126, 0.030178915678726964, 0.037
 # Chiffrement César
 def chiffre_cesar(txt, key):
     """
-    Documentation à écrire
+    fonction qui prend un texte et une clef comme argument et crypte le texte en utilisant le chiffrement de Cesar a clef key
+
+    revoie: le terxte crypter
     """
     message_chiffrer="" 
     for c in txt:
@@ -27,7 +29,12 @@ def chiffre_cesar(txt, key):
 # Déchiffrement César
 def dechiffre_cesar(txt, key):
     """
-    Documentation à écrire
+   Dechiffrement de Cesar
+    Args:
+        txt : le texte à dechiffrer
+        key : la clé de Chiffrement
+    Returns :
+        le texte clair de txt
     """
     message_claire=""
     for c in txt:
@@ -37,6 +44,14 @@ def dechiffre_cesar(txt, key):
 
 # Chiffrement Vigenere
 def chiffre_vigenere(txt, key):
+    """
+    chiffrement de Cesar
+    argument :
+        txt : le texte à dechiffrer
+        key : la clé de Chiffrement
+    Retourne:
+        le texte crypter de txt
+    """
     message_chiffrer=""
     for i in range(0,len(txt)):
         message_chiffrer+=chr((alphabet.index(txt[i])+key[i%len(key)])%len(alphabet)+ord('A'))
@@ -46,7 +61,12 @@ def chiffre_vigenere(txt, key):
 # Déchiffrement Vigenere
 def dechiffre_vigenere(txt, key):
     """
-    Documentation à écrire
+    dechiffrement de Cesar
+    argument:
+        txt : le texte à dechiffrer
+        key : la clé de Chiffrement
+    Returns :
+        le texte clair de txt
     """
     message_chiffrer=""
     t=len(key)
@@ -58,6 +78,10 @@ def dechiffre_vigenere(txt, key):
 
 # Analyse de fréquences
 def freq(txt):
+    """
+    fonction freq qui prend en argument un texte et renvoie un tableau designant la frequence d'apparition de chaque lettre de l'alphabet dans le texte
+    """
+    
     hist=[0.0]*len(alphabet)
     for lettre in txt:
         hist[alphabet.index(lettre)]+=1 
@@ -66,10 +90,17 @@ def freq(txt):
 # Renvoie l'indice dans l'alphabet
 # de la lettre la plus fréquente d'un texte
 def lettre_freq_max(txt):
+    """
+    fonction qui retorune la lettre la plus frequente dans une texte 
+    """
     return freq(txt).index(max(freq(txt)))
 
 # indice de coïncidence
 def indice_coincidence(hist):
+    """
+    fonction qui calcule l'indice de coincidence d'un texte qui prend en argument son histograme designant la frequence d'apparition de chaque lettres 
+    retourn l'indice de coincidence de ce texte qui est  la somme des Ni*(Ni-1)/(taille(texte)*(n-1))
+    """
     n=sum(hist)
     somme=0
     for ni in hist:
@@ -77,6 +108,10 @@ def indice_coincidence(hist):
     return somme
 # Recherche la longueur de la clé
 def longueur_clef(cipher):
+    """
+    fonction qui retorune la longeur de la clef utiliser lors du cryptage
+    cette fonction parcours les 20 taille possible et renvoie la clef qui a comme indice de coincidence supperieur a 0.6 qui represente un texte francais 
+    """
     for i in range(1,20):
             somme=0.0
             for l in range (1,i):
@@ -113,7 +148,9 @@ def cryptanalyse_v1(cipher):
     return cipher
     """
     1) 11 textes etaient bien cryptanalysé
-    2)     
+    2)   Explication : Il est possible d'avoir des textes ou la lettre la plus frequente n'est pas le E, de plus, la fonction lettre_freq_max renvoie la
+    lettre la plus frequente par colonne et celle ci peut ne pas etre le chiffre de E, car #il peut y avoir des lettres de meme frequence ou
+    de frequence assez proche  et aussi la taille des texte chiffrer est assez importante par rapport a la taille de la clef ce qui aide la chryptanalyse 
     """
 ################################################################
 
@@ -124,7 +161,13 @@ def cryptanalyse_v1(cipher):
 # Indice de coincidence mutuelle avec décalages
 def indice_coincidence_mutuelle(h1,h2,d):
     """
-    Documentation à écrire
+     Indice de coincidence mutuelle
+    arguments :
+        h1 : le tableau de fréquences du 1e texte
+        h2 : le tableau de fréquences du 2e texte
+        d : décalage
+    Retourne:
+        ICM des deux textes  
     """
     n1=sum(h1)
     n2=sum(h2)
@@ -139,7 +182,12 @@ def indice_coincidence_mutuelle(h1,h2,d):
 # à la première colonne
 def tableau_decalages_ICM(cipher, key_length):
     """
-    Documentation à écrire
+       Tableau de décalages
+    arguments  :
+            cipher : le texte chiffré
+            key_length : la longueur de la clé
+    Returns:
+        Tableau de décalages probables etant donne la longueur de la cle
     """
     icm=[]
     decalages=[0]*key_length
@@ -150,15 +198,16 @@ def tableau_decalages_ICM(cipher, key_length):
         decalages[i]=icm.index(max(icm))
         icm=[]
     return decalages
-    """
-    1) le nombre de textes qui ont ete bien cryptanalysé est de 42
-    2) 
-    """
+   
 
 # Cryptanalyse V2 avec décalages par ICM
 def cryptanalyse_v2(cipher):
     """
-    Documentation à écrire
+     Cryptanalyse Version 2 par Indice de coincidence mutuelle
+    arguments :
+        cipher : le texte chiffré par un cryptage de vigenere 
+    Retourne:
+        le texte clair
     """
     key_length = longueur_clef(cipher)
     if(key_length != 0):
@@ -180,6 +229,17 @@ def cryptanalyse_v2(cipher):
         return text_dechifrre_en_cesar
     else:
         return cipher
+    """
+    1) le nombre de textes qui ont ete bien cryptanalysé est de 42
+    2)  La cryptanalyse basee sur l'indice de coincidence mutuell
+    e fournit de meilleurs resultats que ceux obtenus avec la premiere
+    approche et en particulier sur des plus petits textes car,
+    contrairement à la premiere cryptanalyse ou on raisonnait independamment par colonne,
+    nous faisons dans cette approche une analyse de frequences sur tout le texte aligne sur
+    le decallage de la premiere colonne. Ceci a pour effet d'augmenter la precision de l'analyse des
+    frequences qui reste cepandant peu representative pour les textes tres courts.
+    Typiquement, nous pouvons tomber dans le cas ou L'algorithme nous renvoie un chiffre autre que celui de E.
+    """
 ################################################################
 
 
@@ -190,7 +250,11 @@ def cryptanalyse_v2(cipher):
 # calcule la correlation lineaire de Pearson
 def correlation(L1,L2):
     """
-    Documentation à écrire
+    Correlation lineaire de Pearson
+    arguments :
+        L1,L2 : 2 listes les memes taille pour lesquelles on souhaite calculer la correlation de Pearson
+    Retourne:
+        Correlation de L1 et L2
     """
     def esperance(X):
         return sum(X)/len(X)
@@ -213,7 +277,12 @@ def correlation(L1,L2):
 # étant donné une longueur de clé fixée
 def clef_correlations(cipher, key_length):
     """
-    Documentation à écrire
+     Clé par Correlations
+    arguments :
+        cipher : le texte chiffré
+        key_length : la longueur de la clé fixé
+    Retourne:
+        La meilleure clé possible par correlation
     """
     
     key=[0]*key_length
@@ -230,7 +299,11 @@ def clef_correlations(cipher, key_length):
 # Cryptanalyse V3 avec correlations
 def cryptanalyse_v3(cipher):
     """
-    Documentation à écrire
+     Cryptanalyse Version 3 avec correlations
+    arguments :
+        cipher : le texte chiffré
+    Retourne:
+        le texte clair decrypté en utilisant la correlations de peason
     """
     resultat=list()
     for i in range(20):
@@ -243,7 +316,7 @@ def cryptanalyse_v3(cipher):
     return dechiffre_vigenere(cipher, key)
 """
     1)94 textes etaient bien cryptanalysé
-    2)les caracteristiques des textes qui echouent est que la longueur de la clef utilisé pour le cryptage est grande
+    2-3)Nous obtenons avec cette approche de tres bons résultats et pour des textes bien plus courts que pour la cryptanalyse par IC. Ceci est du au fait qu'on ne se base plus sur l'etude des frequences pour trouver le chiffré de E mais sur le calcul de la correlaton entre une colonne et un texte de reference. Il reste cepandant quelques textes non dechiffres. Ces textes sont tres petits ce qui fait que le nombre de lettres par colonne et leurs dispositions ne sont pas suffisants pour deduire une quelconque correlation avec un texte de reference.
 
 """
 
